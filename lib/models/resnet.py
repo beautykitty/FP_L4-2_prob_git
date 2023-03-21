@@ -155,8 +155,9 @@ class ResNet(nn.Module):
         x = self.relu(x)
         x = self.maxpool(x)
 
-        x = self.layer1(x)
-        x2 = self.layer2(x)
+        x0 = self.layer1(x)
+        x00 = self.avgpool3(x0)
+        x2 = self.layer2(x0)
         x22 = self.avgpool(x2)
         x = self.layer3(x2)
         x1 = self.layer4(x)
@@ -166,10 +167,10 @@ class ResNet(nn.Module):
         x = self.fc(x)
 
         #x2 = x2.view(x2.size(0),-1,1,1)
-        
-        
-        
-        return F.log_softmax(x, dim=1), x1, x22
+        x00 = x00.view(x00.size(0),-1,1,1)
+
+    
+        return F.log_softmax(x, dim=1), x1, x00
 
 
 def resnet18(args, pretrained=False, **kwargs):
